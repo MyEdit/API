@@ -7,14 +7,17 @@ namespace WebApplication15.Controllers
     public class GetMedicinesController : ControllerBase
     {
         [HttpGet]
-        public ActionResult<List<string[]>> Get()
+        public ActionResult<object> Get()
         {
-            return new List<string[]> {
-                new string[] { "Парацетамол", "Пушкинский", "789" },
-                new string[] { "Цитрамон", "Пушкинский", "986" },
-                new string[] { "Нош-па", "Алексеевский", "874" },
-                new string[] { "Ибупрофен", "Ивановский", "578" }
-            };
+            List<string[]> data =
+            [
+                ["Парацетамол", "Пушкинский", "789"],
+                [ "Цитрамон", "Пушкинский", "986" ],
+                [ "Нош-па", "Алексеевский", "874" ],
+                [ "Ибупрофен", "Ивановский", "578" ]
+            ];
+
+            return new {data};
         }
     }
 }
