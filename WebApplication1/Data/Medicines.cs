@@ -1,26 +1,31 @@
-﻿namespace WebApplication1.Data
+﻿using System.Text;
+
+namespace WebApplication1.Data
 {
     public class Medicines
     {
-        public Medicines(int ID, string Name, string Storage, int Count)
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public string Storage { get; set; }
+        public int Count { get; set; }
+        public byte[] Photo { get; set; }
+
+        public Medicines(int ID, string Name, string Storage, int Count, byte[] Photo)
         {
             this.ID = ID;
             this.Name = Name;
             this.Storage = Storage;
             this.Count = Count;
+            this.Photo = Photo;
         }
 
-        public static List<Medicines> data =
-        [
-            new Medicines(1, "Парацетамол", "Пушкинский", 789),
-            new Medicines(2, "Цитрамон", "Пушкинский", 986),
-            new Medicines(3, "Нош-па", "Алексеевский", 874),
-            new Medicines(4, "Ибупрофен", "Ивановский", 578)
-        ];
-
-        public int ID { get; set; }
-        public string Name { get; set; }
-        public string Storage { get; set; }
-        public int Count { get; set; }
+        public Medicines(string[] data)
+        {
+            ID = Convert.ToInt32(data[0]);
+            Name = data[1];
+            Storage = data[2];
+            Count = Convert.ToInt32(data[3]);
+            Photo = Convert.FromBase64String(data[4]);
+        }
     }
 }

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using WebApplication1.Data;
+using WebApplication1.Utils;
 
 namespace WebApplication15.Controllers
 {
@@ -19,21 +20,26 @@ namespace WebApplication15.Controllers
         [HttpGet("getMedicines")]
         public ActionResult<object> GetMedicines()
         {
-            return Medicines.data;
+            return DataBaseWorker.ExecuteQuery("SELECT * FROM Medicines", 5);
         }
 
         //http://192.168.0.105:5016/api/Medicines/getMedicine?index=0
         [HttpGet("getMedicine")]
         public ActionResult<object> GetMedicine(int index)
         {
-            return Medicines.data[index];
+            List<string[]> medicine = DataBaseWorker.ExecuteQuery($"SELECT * FROM Medicines WHERE ID = {index}", 5);
+
+            if (medicine == null)
+                return HttpStatusCode.NotFound;
+
+            return new Medicines(medicine[0]);
         }
 
         //http://192.168.0.105:5016/api/Medicines/addMedicine
         [HttpPost("addMedicine")]
         public ActionResult<HttpStatusCode> AddMedicine([FromBody] Medicines medicine)
         {
-            Medicines.data.Add(medicine);
+            DataBaseWorker.ExecuteQueryWithoutResponse($"INSERT INTO Medicines (Name, Storage, Count) VALUES ('{medicine.Name}', '{medicine.Storage}', {medicine.Count})");
             return HttpStatusCode.OK;
         }
 
@@ -41,7 +47,7 @@ namespace WebApplication15.Controllers
         [HttpDelete("deleteMedicine")]
         public ActionResult<HttpStatusCode> DeleteMedicine(int index)
         {
-            Medicines.data.RemoveAt(index);
+            DataBaseWorker.ExecuteQueryWithoutResponse($"DELETE FROM Medicines WHERE ID = {index}");
             return HttpStatusCode.OK;
         }
 
@@ -49,7 +55,7 @@ namespace WebApplication15.Controllers
         [HttpPut("updateMedicine")]
         public ActionResult<HttpStatusCode> UpdateMedicine(int index, [FromBody] Medicines updatedMedicine)
         {
-            Medicines.data[index] = updatedMedicine;
+            DataBaseWorker.ExecuteQueryWithoutResponse($"UPDATE Medicines SET Name = '{updatedMedicine.Name}', Storage = '{updatedMedicine.Storage}', Count = {updatedMedicine.Count} WHERE ID = {index}");
             return HttpStatusCode.OK;
         }
     }
