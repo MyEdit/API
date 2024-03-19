@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Text;
+using System.Text.Json.Serialization;
 
 namespace WebApplication1.Data
 {
@@ -8,9 +10,10 @@ namespace WebApplication1.Data
         public string Name { get; set; }
         public string Storage { get; set; }
         public int Count { get; set; }
-        public byte[] Photo { get; set; }
+        public string Photo { get; set; }
 
-        public Medicines(int ID, string Name, string Storage, int Count, byte[] Photo)
+        [JsonConstructor]
+        public Medicines(int ID, string Name, string Storage, int Count, string Photo)
         {
             this.ID = ID;
             this.Name = Name;
@@ -25,7 +28,12 @@ namespace WebApplication1.Data
             Name = data[1];
             Storage = data[2];
             Count = Convert.ToInt32(data[3]);
-            Photo = Convert.FromBase64String(data[4]);
+            Photo = data[4];
+        }
+
+        public static List<Medicines> getListMedicines(List<string[]> data)
+        {
+            return data.Select(item => new Medicines(item)).ToList();
         }
     }
 }
