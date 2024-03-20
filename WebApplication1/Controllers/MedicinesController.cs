@@ -39,7 +39,7 @@ namespace WebApplication15.Controllers
         [HttpPost("addMedicine")]
         public ActionResult<HttpStatusCode> AddMedicine([FromBody] Medicines medicine)
         {
-            DataBaseWorker.ExecuteQueryWithoutResponse($"INSERT INTO Medicines (Name, Storage, Count) VALUES ('{medicine.Name}', '{medicine.Storage}', {medicine.Count})");
+            DataBaseWorker.ExecuteQueryWithoutResponse($"INSERT INTO Medicines (Name, Storage, Count, Photo) VALUES ('{medicine.Name}', '{medicine.Storage}', {medicine.Count}, '{medicine.Photo}')");
             return HttpStatusCode.OK;
         }
 
@@ -55,7 +55,7 @@ namespace WebApplication15.Controllers
         [HttpPut("updateMedicine")]
         public ActionResult<HttpStatusCode> UpdateMedicine(int id, [FromBody] Medicines updatedMedicine)
         {
-            DataBaseWorker.ExecuteQueryWithoutResponse($"UPDATE Medicines SET Name = '{updatedMedicine.Name}', Storage = '{updatedMedicine.Storage}', Count = {updatedMedicine.Count} WHERE ID = {id}");
+            DataBaseWorker.ExecuteQueryWithoutResponse($"UPDATE Medicines SET Name = '{updatedMedicine.Name}', Storage = '{updatedMedicine.Storage}', Count = {updatedMedicine.Count}, Photo = '{updatedMedicine.Photo}' WHERE ID = {id}");
             return HttpStatusCode.OK;
         }
     }
